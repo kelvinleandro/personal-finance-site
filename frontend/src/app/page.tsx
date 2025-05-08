@@ -1,28 +1,20 @@
-import { Box, Button, HStack, Flex, Text } from "@chakra-ui/react";
-import HeroSection from "@/components/sections/HeroSection";
-import Footer from "@/components/sections/Footer";
+import { Box } from "@chakra-ui/react";
+import HeroSection from "@/components/sections/home/HeroSection";
+import Footer from "@/components/sections/home/Footer";
+import Header from "@/components/sections/home/Header";
+import OurResources from "@/components/sections/home/OurResources";
+import TestimonialsSection from "@/components/sections/home/TestimonialsSection";
 
 export default function Home() {
   return (
     <Box>
-      <Flex as={"header"} justify="space-between" align="center" px={4} py={2}>
-        <Text>Logo</Text>
-
-        <HStack>
-          <Button variant="ghost" px={2}>
-            Sobre
-          </Button>
-          <Button variant="ghost" px={2}>
-            Recursos
-          </Button>
-          <Button variant="subtle" px={2}>
-            Log In
-          </Button>
-          <Button px={2}>Sign Up</Button>
-        </HStack>
-      </Flex>
+      <Header />
 
       <HeroSection />
+
+      <OurResources />
+
+      <TestimonialsSection />
 
       <Footer />
     </Box>
