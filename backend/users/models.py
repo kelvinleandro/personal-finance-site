@@ -48,6 +48,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name", "cpf"]
 
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+
     def __str__(self):
         return f"{self.name} ({self.cpf})"
 
@@ -57,6 +61,10 @@ class PhoneNumber(models.Model):
         User, on_delete=models.CASCADE, related_name="phone_numbers"
     )
     number = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name = "Phone Number"
+        verbose_name_plural = "Phone Numbers"
 
     def __str__(self):
         return self.number
