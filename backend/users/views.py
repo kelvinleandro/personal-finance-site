@@ -3,8 +3,6 @@ from rest_framework.permissions import IsAuthenticated
 from .models import User
 from .serializers import UserSerializer
 
-# Create your views here.
-
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

@@ -1,9 +1,10 @@
 from rest_framework import viewsets
-from .models import Account, CurrentAccount, SavingsAccount
+from .models import Account, CurrentAccount, SavingsAccount, Goal
 from .serializers import (
     AccountSerializer,
     CurrentAccountSerializer,
     SavingsAccountSerializer,
+    GoalSerializer,
 )
 
 
@@ -20,3 +21,8 @@ class CurrentAccountViewSet(viewsets.ModelViewSet):
 class SavingsAccountViewSet(viewsets.ModelViewSet):
     queryset = SavingsAccount.objects.select_related("user")
     serializer_class = SavingsAccountSerializer
+
+
+class GoalViewSet(viewsets.ModelViewSet):
+    queryset = Goal.objects.all()
+    serializer_class = GoalSerializer

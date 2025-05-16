@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, CurrentAccount, SavingsAccount
+from .models import Account, CurrentAccount, SavingsAccount, Goal
 
 
 @admin.register(Account)
@@ -15,3 +15,8 @@ class CurrentAccountAdmin(admin.ModelAdmin):
 @admin.register(SavingsAccount)
 class SavingsAccountAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "balance", "interest_rate", "anniversary_date"]
+
+
+@admin.register(Goal)
+class GoalAdmin(admin.ModelAdmin):
+    list_display = ["name", "account", "target_amount", "current_amount", "deadline"]
