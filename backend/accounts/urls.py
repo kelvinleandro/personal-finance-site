@@ -8,10 +8,10 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r"accounts", AccountViewSet)
-router.register(r"current-accounts", CurrentAccountViewSet)
-router.register(r"savings-accounts", SavingsAccountViewSet)
-router.register(r"goals", GoalViewSet)
+router.register(r"", AccountViewSet, basename="account")
+router.register(r"current-accounts", CurrentAccountViewSet, basename="currentaccount")
+router.register(r"savings-accounts", SavingsAccountViewSet, basename="savingsaccount")
+router.register(r"goals", GoalViewSet, basename="goal")
 
 urlpatterns = [
     path("", include(router.urls)),
