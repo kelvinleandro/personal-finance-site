@@ -5,6 +5,7 @@ from .models import Account, CurrentAccount, SavingsAccount, Goal
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "balance"]
+    search_fields = ("user__email",)
 
 
 @admin.register(CurrentAccount)
@@ -20,3 +21,4 @@ class SavingsAccountAdmin(admin.ModelAdmin):
 @admin.register(Goal)
 class GoalAdmin(admin.ModelAdmin):
     list_display = ["name", "account", "target_amount", "current_amount", "deadline"]
+    search_fields = ("name",)

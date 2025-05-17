@@ -11,6 +11,5 @@ class TransactionAdmin(admin.ModelAdmin):
         "account",
         "category",
         "goal",
-        "credit_card",
-        "linked_transaction",
+        "card",
     )
