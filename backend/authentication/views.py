@@ -1,13 +1,8 @@
-from rest_framework import generics, permissions, status
+from rest_framework import permissions, status
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import LogoutSerializer, RegisterSerializer, LoginSerializer
+from .serializers import LogoutSerializer, LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
-
-class SignupView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
-    permission_classes = (permissions.AllowAny,)
 
 
 class LoginView(TokenObtainPairView):
