@@ -5,7 +5,7 @@ from .models import User, PhoneNumber
 class PhoneNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhoneNumber
-        fields = "__all__"
+        exclude = ("user",)
 
 
 class UserSerializer(serializers.ModelSerializer):
