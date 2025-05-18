@@ -12,7 +12,8 @@ class AuthenticationTestCase(APITestCase):
         # create a test user
         self.user = User.objects.create_user(
             cpf="12345678900",
-            name="John Doe",
+            first_name="John",
+            last_name="Doe",
             email="john@example.com",
             password="john_password",
             birth_date="1990-01-01",

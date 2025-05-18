@@ -17,7 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "cpf",
-            "name",
+            "first_name",
+            "last_name",
             "birth_date",
             "email",
             "password",

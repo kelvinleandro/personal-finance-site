@@ -7,26 +7,27 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, cpf, name, email, password=None, **extra_fields):
+    def create_user(self, cpf, email, password=None, **extra_fields):
         if not cpf:
             raise ValueError("CPF is required")
         if not email:
             raise ValueError("Email is required")
         email = self.normalize_email(email)
-        user = self.model(cpf=cpf, name=name, email=email, **extra_fields)
+        user = self.model(cpf=cpf, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, cpf, name, email, password=None, **extra_fields):
+    def create_superuser(self, cpf, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(cpf, name, email, password, **extra_fields)
+        return self.create_user(cpf, email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
     cpf = models.CharField(max_length=14, unique=True, primary_key=True)
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=25)
     birth_date = models.DateField(null=True)
     email = models.EmailField(unique=True)
 
@@ -35,11 +36,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     # Address
-    street = models.CharField(max_length=100)
+    street = models.CharField(max_length=30)
     number = models.CharField(max_length=10)
     complement = models.CharField(max_length=20, blank=True)
-    neighborhood = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
+    neighborhood = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=10)
 
@@ -53,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "Users"
 
     def __str__(self):
-        return f"{self.name} ({self.cpf})"
+        return f"{self.first_name} {self.last_name} ({self.cpf})"
 
 
 class PhoneNumber(models.Model):

@@ -14,7 +14,8 @@ class PhoneNumberInline(admin.TabularInline):
 class UserAdmin(BaseUserAdmin):
     list_display = (
         "cpf",
-        "name",
+        "first_name",
+        "last_name",
         "email",
         "is_active",
         "is_staff",
@@ -22,12 +23,12 @@ class UserAdmin(BaseUserAdmin):
         "birth_date",
     )
     list_filter = ("is_active", "is_staff", "is_superuser")
-    search_fields = ("cpf", "email", "name")
-    ordering = ("cpf",)
+    search_fields = ("cpf", "email", "first_name", "last_name")
+    ordering = ("last_name", "first_name", "cpf")
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("name", "birth_date", "cpf")}),
+        ("Personal info", {"fields": ("first_name", "last_name", "birth_date", "cpf")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
         ("Important dates", {"fields": ("last_login",)}),
     )

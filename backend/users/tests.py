@@ -11,7 +11,8 @@ class UserTestCase(APITestCase):
 
         self.user = User.objects.create_user(
             cpf="12345678900",
-            name="John Doe",
+            first_name="John",
+            last_name="Doe",
             email="john@example.com",
             password="john_password",
             birth_date="1990-01-01",
@@ -31,7 +32,8 @@ class UserTestCase(APITestCase):
         # For user creation/update
         self.user_data = {
             "cpf": "99911122233",
-            "name": "Alice Smith",
+            "first_name": "Alice",
+            "last_name": "Smith",
             "birth_date": "1985-05-05",
             "email": "alice@example.com",
             "password": "alice_pass",
@@ -98,14 +100,14 @@ class UserTestCase(APITestCase):
         self.client.force_authenticate(self.user)
         updated = self.user_data.copy()
         updated["cpf"] = self.user.cpf
-        updated["name"] = "Alice Wonderland"
+        updated["first_name"] = "Alice"
         updated["phone_numbers"] = [{"number": "+5511990002222"}]
 
         resp = self.client.put(self.detail_url(self.user.cpf), updated, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.name, "Alice Wonderland")
+        self.assertEqual(self.user.first_name, "Alice")
         self.assertEqual(self.user.phone_numbers.count(), 1)
 
     def test_update_empty_phone_numbers_fails(self):
@@ -119,11 +121,11 @@ class UserTestCase(APITestCase):
     def test_partial_update_allows_missing_phone_numbers(self):
         self.client.force_authenticate(self.user)
         resp = self.client.patch(
-            self.detail_url(self.user.cpf), {"name": "Johnny"}, format="json"
+            self.detail_url(self.user.cpf), {"first_name": "Johnny"}, format="json"
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
-        self.assertEqual(self.user.name, "Johnny")
+        self.assertEqual(self.user.first_name, "Johnny")
 
     def test_delete_user(self):
         self.client.force_authenticate(self.user)
