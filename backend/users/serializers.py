@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 from .models import User, PhoneNumber
 
@@ -20,8 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
             "birth_date",
             "email",
             "password",
-            "is_active",
-            "is_staff",
             "street",
             "number",
             "complement",
@@ -37,6 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("At least one phone number is required.")
         return value
 
+    @transaction.atomic
     def create(self, validated_data):
         phone_numbers_data = validated_data.pop("phone_numbers")
         password = validated_data.pop("password")
@@ -49,6 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         phone_numbers_data = validated_data.pop("phone_numbers", None)
         password = validated_data.pop("password", None)
