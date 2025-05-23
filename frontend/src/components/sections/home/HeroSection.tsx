@@ -19,7 +19,7 @@ const HeroSection = () => {
       <MotionBox
         initial={{ opacity: 0, scale: 1.2 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.75 }}
+        transition={{ duration: 0.5 }}
       >
         <Text fontWeight="bold" fontSize="4xl">
           Lorem Ipsum <Text as="span">TRALALERO TRALALA</Text>
@@ -38,7 +38,7 @@ const HeroSection = () => {
         bg="white"
         initial={{ opacity: 0, x: "+100vw" }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.75 }}
+        transition={{ duration: 0.5 }}
       />
     </Flex>
   );
