@@ -1,17 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
+from django.utils.translation import gettext_lazy as _
+from .forms import UserAdminChangeForm, UserAdminCreationForm
 from .models import User, PhoneNumber
-
-# Register your models here.
 
 
 class PhoneNumberInline(admin.TabularInline):
     model = PhoneNumber
-    extra = 1  # Number of empty phone number rows to show by default
+    extra = 0  # Number of empty phone number rows to show by default
 
 
 class UserAdmin(BaseUserAdmin):
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
+
     list_display = (
         "cpf",
         "first_name",
@@ -28,17 +30,87 @@ class UserAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personal info", {"fields": ("first_name", "last_name", "birth_date", "cpf")}),
-        ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
-        ("Important dates", {"fields": ("last_login",)}),
+        (
+            _("Personal info"),
+            {"fields": ("first_name", "last_name", "birth_date", "cpf")},
+        ),
+        (
+            _("Address"),
+            {
+                "fields": (
+                    "street",
+                    "number",
+                    "complement",
+                    "neighborhood",
+                    "city",
+                    "state",
+                    "zip_code",
+                )
+            },
+        ),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        (
+            _("Important dates"),
+            {"fields": ("last_login",)},
+        ),
+    )
+
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "password1",
+                    "password2",
+                ),
+            },
+        ),
+        (
+            _("Personal info"),
+            {"fields": ("first_name", "last_name", "birth_date", "cpf")},
+        ),
+        (
+            _("Address info"),
+            {
+                "fields": (
+                    "street",
+                    "number",
+                    "complement",
+                    "neighborhood",
+                    "city",
+                    "state",
+                    "zip_code",
+                )
+            },
+        ),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    # "groups",
+                    # "user_permissions",
+                )
+            },
+        ),
     )
 
     inlines = [PhoneNumberInline]
-
-    def save_model(self, request, obj, form, change):
-        if not change:
-            obj.set_password(obj.password)
-        super().save_model(request, obj, form, change)
 
 
 admin.site.register(User, UserAdmin)

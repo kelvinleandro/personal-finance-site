@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
         return self.create_user(cpf, email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(PermissionsMixin, AbstractBaseUser):
     cpf = models.CharField(max_length=14, unique=True, primary_key=True)
     first_name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=25)
@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "cpf"]
+    REQUIRED_FIELDS = ["cpf"]
 
     class Meta:
         verbose_name = "User"
