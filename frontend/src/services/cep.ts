@@ -1,3 +1,4 @@
+import { CepResponse } from "@/types/cep";
 import axios from "axios";
 
 export async function searchCep(cep: string) {
@@ -7,5 +8,5 @@ export async function searchCep(cep: string) {
     throw new Error("CEP not found");
   }
 
-  return data;
+  return data as CepResponse;
 }
