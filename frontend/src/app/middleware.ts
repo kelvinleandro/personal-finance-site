@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   const isPublicAuth = pathname.startsWith("/(auth)");
 
   if (isProtected && !isAuthenticated) {
-    return NextResponse.redirect(new URL("/(auth)/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (isPublicAuth && isAuthenticated) {

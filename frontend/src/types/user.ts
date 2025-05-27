@@ -1,7 +1,11 @@
-export interface UserCredentials {
-  email: string;
-  password: string;
-}
+import { z } from "zod";
+
+export const LoginSchema = z.object({
+  email: z.string().email({ message: "Invalid email address." }),
+  password: z.string().min(1, { message: "Password cannot be empty." }),
+});
+
+export type LoginCredentials = z.infer<typeof LoginSchema>;
 
 export interface PhoneNumber {
   id?: number;
