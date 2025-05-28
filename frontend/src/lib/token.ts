@@ -4,15 +4,15 @@ import { cookies } from "next/headers";
 const ACCESS_TOKEN_MAX_AGE = 60 * 15;
 const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 7;
 
+const commonOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  sameSite: "lax" as const,
+};
+
 export async function saveTokens(tokens: Partial<Token>) {
   const cookieStore = await cookies();
-
-  const commonOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    sameSite: "lax" as const,
-  };
 
   if (tokens.access) {
     cookieStore.set("access", tokens.access, {
@@ -40,8 +40,8 @@ export async function getRefreshToken() {
 
 export async function clearTokens() {
   const cookieStore = await cookies();
-  cookieStore.set("access", "", { path: "/", httpOnly: true, maxAge: 0 });
-  cookieStore.set("refresh", "", { path: "/", httpOnly: true, maxAge: 0 });
+  cookieStore.set("access", "", { ...commonOptions, maxAge: 0 });
+  cookieStore.set("refresh", "", { ...commonOptions, maxAge: 0 });
   // cookieStore.delete("access");
   // cookieStore.delete("refresh");
 }
