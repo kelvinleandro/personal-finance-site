@@ -20,6 +20,8 @@ class UserAdminChangeForm(UserChangeForm):
             "last_name",
             "birth_date",
             "cpf",
+            "tel1",
+            "tel2",
             "is_active",
             "is_staff",
             "is_superuser",
@@ -44,7 +46,7 @@ class UserAdminCreationForm(UserCreationForm):
     password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
     password2 = forms.CharField(
         label=_("Password confirmation"),
-        label_suffix=_(" (again)"),
+        label_suffix="",
         widget=forms.PasswordInput,
     )
 
@@ -58,6 +60,8 @@ class UserAdminCreationForm(UserCreationForm):
             "last_name",
             "birth_date",
             "cpf",
+            "tel1",
+            "tel2",
             "is_active",
             "is_staff",
             "is_superuser",
@@ -82,11 +86,3 @@ class UserAdminCreationForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise ValidationError(_("The two password fields didn't match."))
         return password2
-
-    def clean(self):
-        """
-        Overrides the clean method to ensure all form-wide validation is handled.
-        Calls the parent's clean method first to get initial cleaned data.
-        """
-        cleaned_data = super().clean()
-        return cleaned_data

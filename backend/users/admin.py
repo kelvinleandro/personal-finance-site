@@ -2,12 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 from .forms import UserAdminChangeForm, UserAdminCreationForm
-from .models import User, PhoneNumber
-
-
-class PhoneNumberInline(admin.TabularInline):
-    model = PhoneNumber
-    extra = 0  # Number of empty phone number rows to show by default
+from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
@@ -19,13 +14,14 @@ class UserAdmin(BaseUserAdmin):
         "first_name",
         "last_name",
         "email",
+        "tel1",
         "is_active",
         "is_staff",
         "is_superuser",
         "birth_date",
     )
     list_filter = ("is_active", "is_staff", "is_superuser")
-    search_fields = ("cpf", "email", "first_name", "last_name")
+    search_fields = ("cpf", "email", "first_name", "last_name", "tel1")
     ordering = ("last_name", "first_name", "cpf")
 
     fieldsets = (
@@ -33,6 +29,10 @@ class UserAdmin(BaseUserAdmin):
         (
             _("Personal info"),
             {"fields": ("first_name", "last_name", "birth_date", "cpf")},
+        ),
+        (
+            _("Contact Information"),
+            {"fields": ("tel1", "tel2")},
         ),
         (
             _("Address"),
@@ -83,6 +83,10 @@ class UserAdmin(BaseUserAdmin):
             {"fields": ("first_name", "last_name", "birth_date", "cpf")},
         ),
         (
+            _("Contact Information"),
+            {"fields": ("tel1", "tel2")},
+        ),
+        (
             _("Address info"),
             {
                 "fields": (
@@ -109,8 +113,6 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-
-    inlines = [PhoneNumberInline]
 
 
 admin.site.register(User, UserAdmin)

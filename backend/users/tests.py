@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from users.models import User, PhoneNumber
+from users.models import User
 
 
 class UserTestCase(APITestCase):
@@ -23,8 +23,9 @@ class UserTestCase(APITestCase):
             city="Sample City",
             state="SC",
             zip_code="12345-678",
+            tel1="11988887777",
+            tel2="1133334444",
         )
-        PhoneNumber.objects.create(user=self.user, number="+5511988887777")
 
         # Helper for detail URL
         self.detail_url = lambda cpf: reverse("user-detail", kwargs={"pk": cpf})
@@ -44,7 +45,8 @@ class UserTestCase(APITestCase):
             "city": "Metropolis",
             "state": "MT",
             "zip_code": "00000-000",
-            "phone_numbers": [{"number": "+5511990001111"}],
+            "tel1": "22990001111",
+            "tel2": "2255556666",
         }
 
     def test_create_user(self):
@@ -58,18 +60,18 @@ class UserTestCase(APITestCase):
 
     def test_create_existing_user_fails(self):
         # CPF is primary key
-        new = self.user_data.copy()
-        new["cpf"] = self.user.cpf
+        data_with_existing_cpf = self.user_data.copy()
+        data_with_existing_cpf["cpf"] = self.user.cpf
 
-        resp = self.client.post(self.list_url, new, format="json")
+        resp = self.client.post(self.list_url, data_with_existing_cpf, format="json")
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
 
         # Email is unique
-        new["cpf"] = self.user_data["cpf"]
-        new["email"] = self.user.email
+        data_with_existing_cpf["cpf"] = self.user_data["cpf"]
+        data_with_existing_cpf["email"] = self.user.email
 
-        resp = self.client.post(self.list_url, new, format="json")
+        resp = self.client.post(self.list_url, data_with_existing_cpf, format="json")
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
 
@@ -101,31 +103,14 @@ class UserTestCase(APITestCase):
         updated = self.user_data.copy()
         updated["cpf"] = self.user.cpf
         updated["first_name"] = "Alice"
-        updated["phone_numbers"] = [{"number": "+5511990002222"}]
+        updated["tel1"] = "5511990002222"
 
         resp = self.client.put(self.detail_url(self.user.cpf), updated, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, "Alice")
-        self.assertEqual(self.user.phone_numbers.count(), 1)
-
-    def test_update_empty_phone_numbers_fails(self):
-        self.client.force_authenticate(self.user)
-        bad = self.user_data.copy()
-        bad["cpf"] = self.user.cpf
-        bad["phone_numbers"] = []
-        resp = self.client.put(self.detail_url(self.user.cpf), bad, format="json")
-        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_partial_update_allows_missing_phone_numbers(self):
-        self.client.force_authenticate(self.user)
-        resp = self.client.patch(
-            self.detail_url(self.user.cpf), {"first_name": "Johnny"}, format="json"
-        )
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.first_name, "Johnny")
+        self.assertEqual(self.user.first_name, updated["first_name"])
+        self.assertEqual(self.user.tel1, updated["tel1"])
 
     def test_delete_user(self):
         self.client.force_authenticate(self.user)
